@@ -1,21 +1,189 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>13 Botões Organizados com Histórico</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background: #f5f5f5;
+      max-width: 800px;
+      margin: auto;
+    }
+    h2 {
+      margin-top: 40px;
+      margin-bottom: 10px;
+      color: #333;
+    }
+    #topo, #meio, #baixo {
+      display: grid;
+      gap: 25px; /* espaçamento */
+      margin-bottom: 30px;
+    }
+    #topo {
+      grid-template-columns: repeat(6, minmax(120px, 1fr));
+    }
+    #meio {
+      grid-template-columns: repeat(4, minmax(140px, 1fr));
+    }
+    #baixo {
+      grid-template-columns: repeat(3, minmax(150px, 1fr));
+    }
 
-button.botao-categoria {
-  width: 100%;
-  background: #2196f3;
-  color: white;
-  border: none;
-  border-radius: 12px;
-  padding: 12px 10px; /* menos padding vertical */
-  font-weight: bold;
-  font-size: 16px;
-  box-shadow: 0 3px 8px rgba(0,0,0,0.15);
-  cursor: pointer;
-  user-select: none;
-  min-height: 60px; /* altura mínima menor */
-  transition: background 0.3s;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-}
+    button.botao-categoria {
+      width: 100%;
+      background: #2196f3;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      padding: 12px 10px; /* altura menor */
+      font-weight: bold;
+      font-size: 16px;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+      cursor: pointer;
+      user-select: none;
+      min-height: 60px; /* altura menor */
+      transition: background 0.3s;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    button.botao-categoria:hover {
+      background: #1976d2;
+    }
+
+    .nome-porcentagem {
+      margin-bottom: 8px;
+      font-size: 15px;
+    }
+    .valor {
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    #historico {
+      background: white;
+      border: 1px solid #ccc;
+      padding: 10px;
+      border-radius: 8px;
+      display: none; /* escondido inicialmente */
+    }
+
+    @media(max-width: 600px) {
+      #topo { grid-template-columns: repeat(3, 1fr); }
+      #meio { grid-template-columns: repeat(2, 1fr); }
+      #baixo { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <h2>Topo - 6 Botões</h2>
+  <div id="topo"></div>
+
+  <h2>Meio - 4 Botões</h2>
+  <div id="meio"></div>
+
+  <h2>Baixo - 3 Botões</h2>
+  <div id="baixo"></div>
+
+  <h2>Histórico</h2>
+  <div id="historico"></div>
+
+  <script>
+    const botoesTopo = [
+      {nome: "Data"},
+      {nome: "Descrição"},
+      {nome: "Digite valor"},
+      {nome: "Adicione"},
+      {nome: "Mostrar/Ocultar"},
+      {nome: "Limpar Histórico"}
+    ];
+
+    const valorTotal = 1000;
+
+    const botoesMeio = [
+      {nome: "Dízimo", porcentagem: 10, valor: valorTotal * 0.10},
+      {nome: "Aluguel", porcentagem: 30, valor: valorTotal * 0.30},
+      {nome: "Conta", porcentagem: 30, valor: valorTotal * 0.30},
+      {nome: "Investimento", porcentagem: 30, valor: valorTotal * 0.30}
+    ];
+
+    const botoesBaixo = [
+      {nome: "Nome pessoa", textoBotao: "Nome pessoa"},
+      {nome: "Valor emprestado", textoBotao: "Quantia emprestada"},
+      {nome: "Emprestar investimento", textoBotao: "Emprestar investimento"}
+    ];
+
+    let historicoValores = [];
+
+    function criarBotoes(lista, containerId) {
+      const container = document.getElementById(containerId);
+      container.innerHTML = "";
+      lista.forEach(item => {
+        const btn = document.createElement("button");
+        btn.className = "botao-categoria";
+
+        // Botão Data mostra a data atual
+        if (item.nome === "Data") {
+          const hoje = new Date();
+          const dia = String(hoje.getDate()).padStart(2, '0');
+          const mes = String(hoje.getMonth() + 1).padStart(2, '0');
+          const ano = hoje.getFullYear();
+          const dataFormatada = `${dia}/${mes}/${ano}`;
+          btn.textContent = `Data: ${dataFormatada}`;
+        }
+        // Botões do meio com porcentagem e valor
+        else if (item.porcentagem !== undefined && item.valor !== undefined) {
+          btn.innerHTML = `<div class="nome-porcentagem">${item.nome} ${item.porcentagem}%</div><div class="valor">R$ ${item.valor.toFixed(2)}</div>`;
+        }
+        // Botões do baixo com texto personalizado
+        else if (item.textoBotao) {
+          btn.textContent = item.textoBotao;
+        }
+        else {
+          btn.textContent = item.nome;
+        }
+
+        // Função Mostrar/Ocultar
+        if (item.nome === "Mostrar/Ocultar") {
+          btn.addEventListener("click", () => {
+            const h = document.getElementById("historico");
+            h.style.display = (h.style.display === "none") ? "block" : "none";
+          });
+        }
+
+        // Função Limpar Histórico
+        if (item.nome === "Limpar Histórico") {
+          btn.addEventListener("click", () => {
+            historicoValores = [];
+            atualizarHistorico();
+          });
+        }
+
+        // Função Adicione adiciona valor exemplo ao histórico
+        if (item.nome === "Adicione") {
+          btn.addEventListener("click", () => {
+            const valorEntrada = Math.floor(Math.random() * 1000) + 1;
+            historicoValores.push(`Entrada: R$ ${valorEntrada.toFixed(2)}`);
+            atualizarHistorico();
+          });
+        }
+
+        container.appendChild(btn);
+      });
+    }
+
+    function atualizarHistorico() {
+      const h = document.getElementById("historico");
+      h.innerHTML = historicoValores.join("<br>");
+    }
+
+    criarBotoes(botoesTopo, "topo");
+    criarBotoes(botoesMeio, "meio");
+    criarBotoes(botoesBaixo, "baixo");
+  </script>
+</body>
+</html>
 
