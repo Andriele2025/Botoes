@@ -1,1 +1,159 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <title>13 Botões Organizados com Histórico</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      background: #f5f5f5;
+      max-width: 700px;
+      margin: auto;
+    }
+    h2 {
+      margin-top: 40px;
+      margin-bottom: 10px;
+      color: #333;
+    }
+    #topo, #meio, #baixo {
+      display: grid;
+      gap: 15px;
+      margin-bottom: 30px;
+    }
+    #topo { grid-template-columns: repeat(6, 1fr); }
+    #meio { grid-template-columns: repeat(4, 1fr); }
+    #baixo { grid-template-columns: repeat(3, 1fr); }
+
+    button.botao-categoria {
+      background: #2196f3;
+      color: white;
+      border: none;
+      border-radius: 12px;
+      padding: 15px 10px;
+      font-weight: bold;
+      font-size: 14px;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+      cursor: pointer;
+      user-select: none;
+      min-height: 70px;
+      transition: background 0.3s;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    button.botao-categoria:hover { background: #1976d2; }
+
+    .nome-porcentagem { margin-bottom: 8px; font-size: 15px; }
+    .valor { font-size: 18px; font-weight: 700; }
+
+    #historico {
+      background: white;
+      border: 1px solid #ccc;
+      padding: 10px;
+      border-radius: 8px;
+      display: none; /* escondido inicialmente */
+    }
+
+    @media(max-width: 600px) {
+      #topo { grid-template-columns: repeat(3, 1fr); }
+      #meio { grid-template-columns: repeat(2, 1fr); }
+      #baixo { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <h2>Topo - 6 Botões</h2>
+  <div id="topo"></div>
+
+  <h2>Meio - 4 Botões</h2>
+  <div id="meio"></div>
+
+  <h2>Baixo - 3 Botões</h2>
+  <div id="baixo"></div>
+
+  <h2>Histórico</h2>
+  <div id="historico"></div>
+
+  <script>
+    const botoesTopo = [
+      {nome: "Data", porcentagem: null, valor: null},
+      {nome: "Descrição", porcentagem: null, valor: null},
+      {nome: "Digite valor", porcentagem: null, valor: null},
+      {nome: "Adicione", porcentagem: null, valor: null},
+      {nome: "Mostrar/Ocultar", porcentagem: null, valor: null},
+      {nome: "Limpar Histórico", porcentagem: null, valor: null}
+    ];
+
+    const valorTotal = 1000;
+
+    const botoesMeio = [
+      {nome: "Dízimo", porcentagem: 10, valor: valorTotal * 0.10},
+      {nome: "Aluguel", porcentagem: 30, valor: valorTotal * 0.30},
+      {nome: "Conta", porcentagem: 30, valor: valorTotal * 0.30},
+      {nome: "Investimento", porcentagem: 30, valor: valorTotal * 0.30}
+    ];
+
+    const botoesBaixo = [
+      {nome: "Nome pessoa", porcentagem: null, valor: null},
+      {nome: "Valor emprestado", porcentagem: null, valor: null},
+      {nome: "Emprestar investimento", porcentagem: null, valor: null}
+    ];
+
+    let historicoValores = []; // lista para armazenar entradas
+
+    function criarBotoes(lista, containerId) {
+      const container = document.getElementById(containerId);
+      container.innerHTML = "";
+      lista.forEach(item => {
+        const btn = document.createElement("button");
+        btn.className = "botao-categoria";
+
+        if (item.porcentagem !== null && item.valor !== null) {
+          btn.innerHTML = `<div class="nome-porcentagem">${item.nome} ${item.porcentagem}%</div><div class="valor">R$ ${item.valor.toFixed(2)}</div>`;
+        } else {
+          btn.textContent = item.nome;
+
+          // Função para Mostrar/Ocultar
+          if (item.nome === "Mostrar/Ocultar") {
+            btn.addEventListener("click", () => {
+              const h = document.getElementById("historico");
+              h.style.display = (h.style.display === "none") ? "block" : "none";
+            });
+          }
+
+          // Função para Limpar Histórico
+          if (item.nome === "Limpar Histórico") {
+            btn.addEventListener("click", () => {
+              historicoValores = [];
+              atualizarHistorico();
+            });
+          }
+
+          // Função exemplo para Adicione (adiciona valor fictício no histórico)
+          if (item.nome === "Adicione") {
+            btn.addEventListener("click", () => {
+              const valorEntrada = Math.floor(Math.random() * 1000) + 1; // valor exemplo
+              historicoValores.push(`Entrada: R$ ${valorEntrada.toFixed(2)}`);
+              atualizarHistorico();
+            });
+          }
+        }
+
+        container.appendChild(btn);
+      });
+    }
+
+    function atualizarHistorico() {
+      const h = document.getElementById("historico");
+      h.innerHTML = historicoValores.join("<br>");
+    }
+
+    criarBotoes(botoesTopo, "topo");
+    criarBotoes(botoesMeio, "meio");
+    criarBotoes(botoesBaixo, "baixo");
+  </script>
+</body>
+</html>
 
