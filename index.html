@@ -2,8 +2,13 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <title>13 Botões Organizados com Histórico</title>
+  <title>13 Botões com Inputs para Nome e Valor</title>
   <style>
+    html, body {
+      height: 100%;
+      margin: 0;
+      padding: 0;
+    }
     body {
       font-family: Arial, sans-serif;
       padding: 20px;
@@ -11,39 +16,51 @@
       max-width: 800px;
       margin: auto;
     }
+    #container-principal {
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      padding: 10px 0;
+    }
     h2 {
       margin-top: 40px;
       margin-bottom: 10px;
       color: #333;
     }
-    #topo, #meio, #baixo {
-      display: grid;
-      gap: 25px; /* espaçamento */
-      margin-bottom: 30px;
-    }
     #topo {
+      display: grid;
       grid-template-columns: repeat(6, minmax(120px, 1fr));
+      gap: 25px;
+      padding-bottom: 15px;
     }
     #meio {
+      display: grid;
       grid-template-columns: repeat(4, minmax(140px, 1fr));
+      gap: 25px;
+      flex-grow: 1;
+      justify-items: center;
+      align-content: center;
+      padding: 15px 0;
     }
     #baixo {
+      display: grid;
       grid-template-columns: repeat(3, minmax(150px, 1fr));
+      gap: 25px;
+      margin-bottom: 6cm;
     }
-
     button.botao-categoria {
       width: 100%;
       background: #2196f3;
       color: white;
       border: none;
       border-radius: 12px;
-      padding: 12px 10px; /* altura menor */
+      padding: 12px 10px;
       font-weight: bold;
       font-size: 16px;
       box-shadow: 0 3px 8px rgba(0,0,0,0.15);
       cursor: pointer;
       user-select: none;
-      min-height: 60px; /* altura menor */
+      min-height: 60px;
       transition: background 0.3s;
       display: flex;
       flex-direction: column;
@@ -53,7 +70,6 @@
     button.botao-categoria:hover {
       background: #1976d2;
     }
-
     .nome-porcentagem {
       margin-bottom: 8px;
       font-size: 15px;
@@ -62,15 +78,31 @@
       font-size: 18px;
       font-weight: 700;
     }
-
     #historico {
       background: white;
       border: 1px solid #ccc;
       padding: 10px;
       border-radius: 8px;
-      display: none; /* escondido inicialmente */
+      display: none;
     }
-
+    /* Estilo para inputs semelhantes aos botões */
+    .input-categoria {
+      width: 100%;
+      padding: 12px 10px;
+      font-size: 16px;
+      border-radius: 12px;
+      border: 1px solid #2196f3;
+      box-shadow: 0 3px 8px rgba(33, 150, 243, 0.4);
+      font-weight: bold;
+      outline: none;
+      box-sizing: border-box;
+      min-height: 60px;
+      color: #333;
+    }
+    .input-categoria:focus {
+      border-color: #1976d2;
+      box-shadow: 0 3px 8px rgba(25, 118, 210, 0.7);
+    }
     @media(max-width: 600px) {
       #topo { grid-template-columns: repeat(3, 1fr); }
       #meio { grid-template-columns: repeat(2, 1fr); }
@@ -79,17 +111,23 @@
   </style>
 </head>
 <body>
-  <h2>Topo - 6 Botões</h2>
-  <div id="topo"></div>
+  <div id="container-principal">
+    <h2>Topo - 6 Botões</h2>
+    <div id="topo"></div>
 
-  <h2>Meio - 4 Botões</h2>
-  <div id="meio"></div>
+    <h2>Meio - 4 Botões</h2>
+    <div id="meio"></div>
 
-  <h2>Baixo - 3 Botões</h2>
-  <div id="baixo"></div>
+    <h2>Baixo - 3 Botões (Inputs)</h2>
+    <div id="baixo">
+      <input id="inputNomePessoa" class="input-categoria" type="text" placeholder="Nome pessoa" />
+      <input id="inputValorEmprestado" class="input-categoria" type="number" placeholder="Quantia emprestada" />
+      <button id="btnEmprestarInvestimento" class="botao-categoria">Emprestar investimento</button>
+    </div>
 
-  <h2>Histórico</h2>
-  <div id="historico"></div>
+    <h2>Histórico</h2>
+    <div id="historico"></div>
+  </div>
 
   <script>
     const botoesTopo = [
@@ -110,12 +148,6 @@
       {nome: "Investimento", porcentagem: 30, valor: valorTotal * 0.30}
     ];
 
-    const botoesBaixo = [
-      {nome: "Nome pessoa", textoBotao: "Nome pessoa"},
-      {nome: "Valor emprestado", textoBotao: "Quantia emprestada"},
-      {nome: "Emprestar investimento", textoBotao: "Emprestar investimento"}
-    ];
-
     let historicoValores = [];
 
     function criarBotoes(lista, containerId) {
@@ -125,7 +157,6 @@
         const btn = document.createElement("button");
         btn.className = "botao-categoria";
 
-        // Botão Data mostra a data atual
         if (item.nome === "Data") {
           const hoje = new Date();
           const dia = String(hoje.getDate()).padStart(2, '0');
@@ -134,19 +165,13 @@
           const dataFormatada = `${dia}/${mes}/${ano}`;
           btn.textContent = `Data: ${dataFormatada}`;
         }
-        // Botões do meio com porcentagem e valor
         else if (item.porcentagem !== undefined && item.valor !== undefined) {
           btn.innerHTML = `<div class="nome-porcentagem">${item.nome} ${item.porcentagem}%</div><div class="valor">R$ ${item.valor.toFixed(2)}</div>`;
-        }
-        // Botões do baixo com texto personalizado
-        else if (item.textoBotao) {
-          btn.textContent = item.textoBotao;
         }
         else {
           btn.textContent = item.nome;
         }
 
-        // Função Mostrar/Ocultar
         if (item.nome === "Mostrar/Ocultar") {
           btn.addEventListener("click", () => {
             const h = document.getElementById("historico");
@@ -154,7 +179,6 @@
           });
         }
 
-        // Função Limpar Histórico
         if (item.nome === "Limpar Histórico") {
           btn.addEventListener("click", () => {
             historicoValores = [];
@@ -162,7 +186,6 @@
           });
         }
 
-        // Função Adicione adiciona valor exemplo ao histórico
         if (item.nome === "Adicione") {
           btn.addEventListener("click", () => {
             const valorEntrada = Math.floor(Math.random() * 1000) + 1;
@@ -182,8 +205,30 @@
 
     criarBotoes(botoesTopo, "topo");
     criarBotoes(botoesMeio, "meio");
-    criarBotoes(botoesBaixo, "baixo");
+
+    // Evento do botão Emprestar investimento
+    document.getElementById("btnEmprestarInvestimento").addEventListener("click", () => {
+      const nome = document.getElementById("inputNomePessoa").value.trim();
+      const valor = parseFloat(document.getElementById("inputValorEmprestado").value);
+
+      if (!nome) {
+        alert("Por favor, preencha o nome da pessoa.");
+        return;
+      }
+      if (isNaN(valor) || valor <= 0) {
+        alert("Por favor, insira um valor válido para quantia emprestada.");
+        return;
+      }
+
+      historicoValores.push(`Emprestado R$ ${valor.toFixed(2)} para ${nome}`);
+      atualizarHistorico();
+
+      // Limpar inputs após adicionar
+      document.getElementById("inputNomePessoa").value = "";
+      document.getElementById("inputValorEmprestado").value = "";
+    });
   </script>
 </body>
 </html>
+
 
