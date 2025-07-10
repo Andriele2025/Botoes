@@ -2,181 +2,72 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <title>Divisão Entrada Dinheiro</title>
+  <title>Botões Financeiros</title>
   <style>
     body {
-      background: #f5f5f5;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 20px;
-      padding: 30px;
+      background: #111;
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      color: #fff;
     }
 
-    .linha {
-      display: flex;
+    .botoes-container {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
       gap: 15px;
-      flex-wrap: wrap;
-      justify-content: center;
     }
 
-    input, button {
-      width: 160px;
-      height: 70px;
-      border: none;
+    .botao-grande {
+      background: #222;
+      padding: 20px;
       border-radius: 10px;
-      font-size: 16px;
-      padding: 0 10px;
-      box-sizing: border-box;
       text-align: center;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.5);
     }
 
-    input {
-      background: white;
-      border: 1px solid #ccc;
+    .botao-grande h2 {
+      margin: 0;
+      font-size: 18px;
+      color: #aaa;
     }
 
-    button {
-      color: white;
+    .botao-grande p {
+      margin: 5px 0 0;
+      font-size: 24px;
+      color: #0f0;
       font-weight: bold;
-      cursor: pointer;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
-      transition: transform 0.1s ease, box-shadow 0.1s ease;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-    }
-
-    button:active {
-      transform: scale(0.95);
-      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
-    }
-
-    .red { background: #e53935; }
-    .blue { background: #1565c0; }
-    .green { background: #43a047; }
-
-    .valor {
-      font-size: 14px;
-      font-weight: normal;
-      margin-top: 5px;
     }
   </style>
 </head>
 <body>
 
-  <!-- 7 botões/inputs em cima -->
-  <div class="linha">
-    <input type="date" id="data">
-    <input type="text" id="descricao" placeholder="Descrição">
-    <input type="number" id="valor" placeholder="Valor">
-    <button class="red" onclick="adicionar()">Adicionar</button>
-    <button class="red" onclick="toggleTodos()">Mostrar/Ocultar</button>
-    <button class="red" onclick="limparHistorico()">Limpar Histórico</button>
-    <button class="green" onclick="entradaDinheiro()">Entrada Dinheiro</button>
+  <div class="botoes-container">
+    <div class="botao-grande">
+      <h2>Dízimo</h2>
+      <p>R$ 0.00</p>
+    </div>
+
+    <div class="botao-grande">
+      <h2>Investimento</h2>
+      <p>R$ 0.00</p>
+    </div>
+
+    <div class="botao-grande">
+      <h2>Contas</h2>
+      <p>R$ 0.00</p>
+    </div>
+
+    <div class="botao-grande">
+      <h2>Alimentação</h2>
+      <p>R$ 0.00</p>
+    </div>
   </div>
-
-  <!-- 4 botões do meio com valor dentro -->
-  <div class="linha">
-    <button class="blue" id="dizimo">
-      Dízimo 10%
-      <div class="valor" id="valDizimo">R$ 0,00</div>
-    </button>
-    <button class="blue" id="aluguel">
-      Aluguel 30%
-      <div class="valor" id="valAluguel">R$ 0,00</div>
-    </button>
-  </div>
-  <div class="linha">
-    <button class="blue" id="contas">
-      Contas 30%
-      <div class="valor" id="valContas">R$ 0,00</div>
-    </button>
-    <button class="blue" id="investimento" onclick="toggleInvestimento()">
-      Investimento 30%
-      <div class="valor" id="valInvestimento">R$ 0,00</div>
-    </button>
-  </div>
-
-  <script>
-    function entradaDinheiro() {
-      const valorInput = document.getElementById('valor').value;
-      const valor = parseFloat(valorInput);
-      if (isNaN(valor) || valor <= 0) {
-        alert('Insira um valor válido');
-        return;
-      }
-
-      const dizimo = valor * 0.10;
-      const aluguel = valor * 0.30;
-      const contas = valor * 0.30;
-      const investimento = valor * 0.30;
-
-      document.getElementById('valDizimo').innerText = `R$ ${dizimo.toFixed(2)}`;
-      document.getElementById('valAluguel').innerText = `R$ ${aluguel.toFixed(2)}`;
-      document.getElementById('valContas').innerText = `R$ ${contas.toFixed(2)}`;
-
-      const investimentoElem = document.getElementById('valInvestimento');
-      let investimentoAtual = parseFloat(investimentoElem.innerText.replace('R$', '').replace(',', '.'));
-      if (isNaN(investimentoAtual)) investimentoAtual = 0;
-      investimentoAtual += investimento;
-      investimentoElem.innerText = `R$ ${investimentoAtual.toFixed(2)}`;
-    }
-
-    function adicionar() {
-      const data = document.getElementById('data').value;
-      const descricao = document.getElementById('descricao').value;
-      const valor = document.getElementById('valor').value;
-
-      if (!data || !descricao || !valor) {
-        alert('Preencha todos os campos antes de adicionar.');
-        return;
-      }
-
-      console.log(`Adicionado: ${data} | ${descricao} | R$ ${parseFloat(valor).toFixed(2)}`);
-
-      // Limpa os campos após adicionar
-      document.getElementById('data').value = '';
-      document.getElementById('descricao').value = '';
-      document.getElementById('valor').value = '';
-
-      alert('Entrada adicionada com sucesso.');
-    }
-
-    function limparHistorico() {
-      document.getElementById('valDizimo').innerText = 'R$ 0,00';
-      document.getElementById('valAluguel').innerText = 'R$ 0,00';
-      document.getElementById('valContas').innerText = 'R$ 0,00';
-      // investimento permanece
-    }
-
-    function toggleInvestimento() {
-      const elem = document.getElementById('valInvestimento');
-      if (elem.style.display === 'none' || elem.style.display === '') {
-        elem.style.display = 'block';
-      } else {
-        elem.style.display = 'none';
-      }
-    }
-
-    function toggleTodos() {
-      // exemplo: mostrar ou ocultar todos valores ao clicar (se quiser usar no botão Mostrar/Ocultar)
-      const ids = ['valDizimo', 'valAluguel', 'valContas', 'valInvestimento'];
-      ids.forEach(id => {
-        const el = document.getElementById(id);
-        if (el.style.display === 'none' || el.style.display === '') {
-          el.style.display = 'block';
-        } else {
-          el.style.display = 'none';
-        }
-      });
-    }
-  </script>
 
 </body>
 </html>
+
+
+
 
 
 
