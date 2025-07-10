@@ -1,170 +1,157 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <title>Layout Caixa</title>
+  <title>Divisão Entrada Dinheiro</title>
   <style>
-    html, body {
-      height: 100%;
-      margin: 0;
-      padding: 0;
-      box-sizing: border-box;
-    }
     body {
-      font-family: Arial, sans-serif;
       background: #f5f5f5;
-      max-width: 800px;
-      margin: auto;
-      padding-bottom: 150px; /* espaço pro rodapé flutuante */
-    }
-    #container-principal {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
       display: flex;
       flex-direction: column;
-      min-height: 100vh;
+      align-items: center;
+      gap: 20px;
+      padding: 30px;
     }
-    #meio {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      grid-template-rows: repeat(2, auto);
-      gap: 25px;
-      justify-items: center;
-      align-content: center;
-      flex: 1;
-      margin-top: 50px;
+
+    .linha {
+      display: flex;
+      gap: 15px;
+      flex-wrap: wrap;
+      justify-content: center;
     }
-    #meio button.botao-categoria {
-      width: 90%;
-      min-height: 140px; /* maior altura */
-      font-size: 20px;
-      padding: 25px 15px;
-      border-radius: 16px;
-    }
-    .botao-categoria {
-      background: #2196f3;
-      color: white;
+
+    input, button {
+      width: 160px;
+      height: 60px;
       border: none;
-      box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+      border-radius: 10px;
+      font-size: 16px;
+      padding: 0 10px;
+      box-sizing: border-box;
+      text-align: center;
+    }
+
+    input {
+      background: white;
+      border: 1px solid #ccc;
+    }
+
+    button {
+      color: white;
       font-weight: bold;
       cursor: pointer;
-      user-select: none;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      transition: transform 0.1s ease, box-shadow 0.1s ease;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
-      transition: background 0.3s;
     }
-    .botao-categoria:hover {
-      background: #1976d2;
+
+    button:active {
+      transform: scale(0.95);
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
     }
-    #baixo {
-      position: fixed;
-      bottom: 50px; /* distância do rodapé real */
-      left: 50%;
-      transform: translateX(-50%);
-      width: 95%;
-      max-width: 800px;
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 15px;
-      background: #ffffff;
-      border: 2px solid #2196f3;
-      border-radius: 20px;
-      padding: 20px;
-      box-shadow: 0 -3px 15px rgba(0,0,0,0.2);
-      box-sizing: border-box;
-    }
-    #baixo button.botao-categoria,
-    #baixo .input-categoria {
-      background: #ffffff;
-      border: 2px solid #2196f3;
-      color: #2196f3;
-      min-height: 55px;
-      font-size: 16px;
-      border-radius: 12px;
-      padding: 12px;
-      box-sizing: border-box;
-      font-weight: bold;
-    }
-    #baixo button.botao-categoria:hover {
-      background: #2196f3;
-      color: #ffffff;
-    }
-    .input-categoria:focus {
-      outline: none;
-      border-color: #1976d2;
-    }
-    .nome-porcentagem {
-      margin-bottom: 8px;
-      font-size: 16px;
-    }
+
+    .red { background: #e53935; }
+    .blue { background: #1565c0; }
+    .yellow { background: #f9a825; }
+    .green { background: #43a047; }
+
     .valor {
-      font-size: 22px;
-      font-weight: 700;
-    }
-    #historico {
-      background: white;
-      border: 1px solid #ccc;
-      padding: 10px;
-      border-radius: 8px;
-      display: none;
-      margin: 20px;
+      font-size: 14px;
+      font-weight: normal;
+      margin-top: 5px;
+      display: none; /* inicia oculto para o investimento */
     }
   </style>
 </head>
 <body>
-  <div id="container-principal">
-    <div id="meio"></div>
 
-    <div id="historico"></div>
+  <!-- 7 botões/inputs em cima -->
+  <div class="linha">
+    <input type="date" id="data">
+    <input type="text" id="descricao" placeholder="Descrição">
+    <input type="number" id="valor" placeholder="Valor">
+    <button class="red" onclick="adicionar()">Adicionar</button>
+    <button class="red">Mostrar/Ocultar</button>
+    <button class="red" onclick="limparHistorico()">Limpar Histórico</button>
+    <button class="green" onclick="entradaDinheiro()">Entrada Dinheiro</button>
   </div>
 
-  <div id="baixo">
-    <input id="inputNomePessoa" class="input-categoria" type="text" placeholder="Nome pessoa" />
-    <input id="inputValorEmprestado" class="input-categoria" type="number" placeholder="Quantia emprestada" />
-    <button id="btnEmprestarInvestimento" class="botao-categoria">Emprestar investimento</button>
+  <!-- 4 botões do meio com valor dentro -->
+  <div class="linha">
+    <button class="blue" id="dizimo">
+      Dízimo 10%
+      <div class="valor" id="valDizimo">R$ 0,00</div>
+    </button>
+    <button class="blue" id="aluguel">
+      Aluguel 30%
+      <div class="valor" id="valAluguel">R$ 0,00</div>
+    </button>
+  </div>
+  <div class="linha">
+    <button class="blue" id="contas">
+      Contas 30%
+      <div class="valor" id="valContas">R$ 0,00</div>
+    </button>
+    <button class="blue" id="investimento" onclick="toggleInvestimento()">
+      Investimento 30%
+      <div class="valor" id="valInvestimento">R$ 0,00</div>
+    </button>
   </div>
 
   <script>
-    const valorTotal = 1000;
-    const botoesMeio = [
-      {nome: "Dízimo", porcentagem: 10, valor: valorTotal * 0.10},
-      {nome: "Aluguel", porcentagem: 30, valor: valorTotal * 0.30},
-      {nome: "Conta", porcentagem: 30, valor: valorTotal * 0.30},
-      {nome: "Investimento", porcentagem: 30, valor: valorTotal * 0.30}
-    ];
-    let historicoValores = [];
-    function criarBotoesMeio() {
-      const container = document.getElementById("meio");
-      botoesMeio.forEach(item => {
-        const btn = document.createElement("button");
-        btn.className = "botao-categoria";
-        btn.innerHTML = `<div class="nome-porcentagem">${item.nome} ${item.porcentagem}%</div>
-                         <div class="valor">R$ ${item.valor.toFixed(2)}</div>`;
-        container.appendChild(btn);
-      });
-    }
-    criarBotoesMeio();
-
-    document.getElementById("btnEmprestarInvestimento").addEventListener("click", () => {
-      const nome = document.getElementById("inputNomePessoa").value.trim();
-      const valor = parseFloat(document.getElementById("inputValorEmprestado").value);
-      if (!nome) {
-        alert("Preencha o nome!");
-        return;
-      }
+    function entradaDinheiro() {
+      const valor = parseFloat(document.getElementById('valor').value);
       if (isNaN(valor) || valor <= 0) {
-        alert("Digite valor válido!");
+        alert('Insira um valor válido');
         return;
       }
-      historicoValores.push(`Emprestado R$ ${valor.toFixed(2)} para ${nome}`);
-      document.getElementById("historico").style.display = "block";
-      document.getElementById("historico").innerHTML = historicoValores.join("<br>");
-      document.getElementById("inputNomePessoa").value = "";
-      document.getElementById("inputValorEmprestado").value = "";
-    });
+
+      const dizimo = valor * 0.10;
+      const aluguel = valor * 0.30;
+      const contas = valor * 0.30;
+      const investimento = valor * 0.30;
+
+      // Exibir valores dentro dos botões
+      document.getElementById('valDizimo').innerText = `R$ ${dizimo.toFixed(2)}`;
+      document.getElementById('valAluguel').innerText = `R$ ${aluguel.toFixed(2)}`;
+      document.getElementById('valContas').innerText = `R$ ${contas.toFixed(2)}`;
+
+      // Atualiza investimento somando ao valor já existente
+      const investimentoElem = document.getElementById('valInvestimento');
+      let investimentoAtual = parseFloat(investimentoElem.innerText.replace('R$', '').replace(',', '.'));
+      if (isNaN(investimentoAtual)) investimentoAtual = 0;
+      investimentoAtual += investimento;
+      investimentoElem.innerText = `R$ ${investimentoAtual.toFixed(2)}`;
+    }
+
+    function adicionar() {
+      alert('Função de adicionar entrada será implementada.');
+    }
+
+    function limparHistorico() {
+      // Zera dízimo, aluguel e contas
+      document.getElementById('valDizimo').innerText = 'R$ 0,00';
+      document.getElementById('valAluguel').innerText = 'R$ 0,00';
+      document.getElementById('valContas').innerText = 'R$ 0,00';
+      // Investimento permanece com o valor que estiver
+    }
+
+    function toggleInvestimento() {
+      const valorElem = document.getElementById('valInvestimento');
+      if (valorElem.style.display === 'none' || valorElem.style.display === '') {
+        valorElem.style.display = 'block'; // mostra
+      } else {
+        valorElem.style.display = 'none'; // oculta
+      }
+    }
   </script>
+
 </body>
 </html>
+
 
 
