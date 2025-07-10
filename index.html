@@ -1,8 +1,9 @@
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <title>Botões Financeiros</title>
+  <title>Botões Financeiros Grandes</title>
   <style>
     body {
       background: #111;
@@ -12,28 +13,29 @@
     }
 
     .botoes-container {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 15px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
     }
 
     .botao-grande {
       background: #222;
-      padding: 20px;
-      border-radius: 10px;
+      padding: 30px;
+      border-radius: 15px;
       text-align: center;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.5);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.6);
+      width: 100%;
     }
 
     .botao-grande h2 {
       margin: 0;
-      font-size: 18px;
+      font-size: 24px;
       color: #aaa;
     }
 
     .botao-grande p {
-      margin: 5px 0 0;
-      font-size: 24px;
+      margin: 10px 0 0;
+      font-size: 32px;
       color: #0f0;
       font-weight: bold;
     }
