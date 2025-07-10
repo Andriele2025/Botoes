@@ -3,7 +3,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <title>Botões com Rodapé Fixo Estilo Caixa</title>
+  <title>Layout Caixa</title>
   <style>
     html, body {
       height: 100%;
@@ -13,27 +13,15 @@
     }
     body {
       font-family: Arial, sans-serif;
-      padding: 20px;
       background: #f5f5f5;
       max-width: 800px;
       margin: auto;
-      padding-bottom: 110px; /* espaço para o rodapé fixo */
+      padding-bottom: 150px; /* espaço pro rodapé flutuante */
     }
     #container-principal {
       display: flex;
       flex-direction: column;
       min-height: 100vh;
-    }
-    h2 {
-      margin-top: 40px;
-      margin-bottom: 10px;
-      color: #333;
-    }
-    #topo {
-      display: grid;
-      grid-template-columns: repeat(6, minmax(120px, 1fr));
-      gap: 25px;
-      padding-bottom: 15px;
     }
     #meio {
       display: grid;
@@ -41,78 +29,77 @@
       grid-template-rows: repeat(2, auto);
       gap: 25px;
       justify-items: center;
-      align-content: start;
-      padding: 5px 0;
-      margin-top: -15px;
-      flex-grow: 1;
+      align-content: center;
+      flex: 1;
+      margin-top: 50px;
     }
     #meio button.botao-categoria {
-      min-height: 100px;
-      font-size: 18px;
-      padding: 20px 10px;
       width: 90%;
+      min-height: 140px; /* maior altura */
+      font-size: 20px;
+      padding: 25px 15px;
+      border-radius: 16px;
     }
-    #baixo {
-      position: fixed;
-  bottom: 150px; /* sobe 50px do fundo */
-  left: 50%;
-  transform: translateX(-50%);
-  width: 100%;
-  max-width: 800px;
-  display: grid;
-  grid-template-columns: repeat(3, minmax(150px, 1fr));
-  gap: 15px;
-  background: #2196f3;
-  padding: 15px 20px;
-  box-shadow: 0 -3px 10px rgba(0,0,0,0.2);
-  border-radius: 12px 12px 0 0;
-  box-sizing: border-box;
-  z-index: 9999;
-    }
-    #baixo button.botao-categoria,
-    #baixo .input-categoria {
-      background: white;
-      color: #2196f3;
-      border: none;
-      font-weight: bold;
-      box-shadow: none;
-      min-height: 50px;
-      padding: 10px;
-      border-radius: 8px;
-      box-sizing: border-box;
-    }
-    #baixo button.botao-categoria:hover {
-      background: #1976d2;
-      color: white;
-    }
-    button.botao-categoria {
-      width: 100%;
+    .botao-categoria {
       background: #2196f3;
       color: white;
       border: none;
-      border-radius: 12px;
-      padding: 12px 10px;
-      font-weight: bold;
-      font-size: 16px;
       box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+      font-weight: bold;
       cursor: pointer;
       user-select: none;
-      min-height: 60px;
-      transition: background 0.3s;
       display: flex;
       flex-direction: column;
       justify-content: center;
       align-items: center;
+      transition: background 0.3s;
     }
-    button.botao-categoria:hover {
+    .botao-categoria:hover {
       background: #1976d2;
+    }
+    #baixo {
+      position: fixed;
+      bottom: 50px; /* distância do rodapé real */
+      left: 50%;
+      transform: translateX(-50%);
+      width: 95%;
+      max-width: 800px;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 15px;
+      background: #ffffff;
+      border: 2px solid #2196f3;
+      border-radius: 20px;
+      padding: 20px;
+      box-shadow: 0 -3px 15px rgba(0,0,0,0.2);
+      box-sizing: border-box;
+    }
+    #baixo button.botao-categoria,
+    #baixo .input-categoria {
+      background: #ffffff;
+      border: 2px solid #2196f3;
+      color: #2196f3;
+      min-height: 55px;
+      font-size: 16px;
+      border-radius: 12px;
+      padding: 12px;
+      box-sizing: border-box;
+      font-weight: bold;
+    }
+    #baixo button.botao-categoria:hover {
+      background: #2196f3;
+      color: #ffffff;
+    }
+    .input-categoria:focus {
+      outline: none;
+      border-color: #1976d2;
     }
     .nome-porcentagem {
       margin-bottom: 8px;
-      font-size: 15px;
+      font-size: 16px;
     }
     .valor {
-      font-size: 18px;
+      font-size: 22px;
       font-weight: 700;
     }
     #historico {
@@ -121,41 +108,14 @@
       padding: 10px;
       border-radius: 8px;
       display: none;
-      margin-top: 20px;
-    }
-    .input-categoria {
-      width: 100%;
-      padding: 12px 10px;
-      font-size: 16px;
-      border-radius: 12px;
-      border: 1px solid #2196f3;
-      box-shadow: 0 3px 8px rgba(33, 150, 243, 0.4);
-      font-weight: bold;
-      outline: none;
-      box-sizing: border-box;
-      min-height: 50px;
-      color: #333;
-    }
-    .input-categoria:focus {
-      border-color: #1976d2;
-      box-shadow: 0 3px 8px rgba(25, 118, 210, 0.7);
-    }
-    @media(max-width: 600px) {
-      #topo { grid-template-columns: repeat(3, 1fr); }
-      #meio { grid-template-columns: repeat(2, 1fr); }
-      #baixo { grid-template-columns: 1fr; padding: 10px 15px; }
+      margin: 20px;
     }
   </style>
 </head>
 <body>
   <div id="container-principal">
-    <h2>Topo - 6 Botões</h2>
-    <div id="topo"></div>
-
-    <h2>Meio - 4 Botões (2x2)</h2>
     <div id="meio"></div>
 
-    <h2>Histórico</h2>
     <div id="historico"></div>
   </div>
 
@@ -166,100 +126,40 @@
   </div>
 
   <script>
-    const botoesTopo = [
-      {nome: "Data"},
-      {nome: "Descrição"},
-      {nome: "Digite valor"},
-      {nome: "Adicione"},
-      {nome: "Mostrar/Ocultar"},
-      {nome: "Limpar Histórico"}
-    ];
-
     const valorTotal = 1000;
-
     const botoesMeio = [
       {nome: "Dízimo", porcentagem: 10, valor: valorTotal * 0.10},
       {nome: "Aluguel", porcentagem: 30, valor: valorTotal * 0.30},
       {nome: "Conta", porcentagem: 30, valor: valorTotal * 0.30},
       {nome: "Investimento", porcentagem: 30, valor: valorTotal * 0.30}
     ];
-
     let historicoValores = [];
-
-    function criarBotoes(lista, containerId) {
-      const container = document.getElementById(containerId);
-      container.innerHTML = "";
-      lista.forEach(item => {
+    function criarBotoesMeio() {
+      const container = document.getElementById("meio");
+      botoesMeio.forEach(item => {
         const btn = document.createElement("button");
         btn.className = "botao-categoria";
-
-        if (item.nome === "Data") {
-          const hoje = new Date();
-          const dia = String(hoje.getDate()).padStart(2, '0');
-          const mes = String(hoje.getMonth() + 1).padStart(2, '0');
-          const ano = hoje.getFullYear();
-          const dataFormatada = `${dia}/${mes}/${ano}`;
-          btn.textContent = `Data: ${dataFormatada}`;
-        }
-        else if (item.porcentagem !== undefined && item.valor !== undefined) {
-          btn.innerHTML = `<div class="nome-porcentagem">${item.nome} ${item.porcentagem}%</div><div class="valor">R$ ${item.valor.toFixed(2)}</div>`;
-        }
-        else {
-          btn.textContent = item.nome;
-        }
-
-        if (item.nome === "Mostrar/Ocultar") {
-          btn.addEventListener("click", () => {
-            const h = document.getElementById("historico");
-            h.style.display = (h.style.display === "none") ? "block" : "none";
-          });
-        }
-
-        if (item.nome === "Limpar Histórico") {
-          btn.addEventListener("click", () => {
-            historicoValores = [];
-            atualizarHistorico();
-          });
-        }
-
-        if (item.nome === "Adicione") {
-          btn.addEventListener("click", () => {
-            const valorEntrada = Math.floor(Math.random() * 1000) + 1;
-            historicoValores.push(`Entrada: R$ ${valorEntrada.toFixed(2)}`);
-            atualizarHistorico();
-          });
-        }
-
+        btn.innerHTML = `<div class="nome-porcentagem">${item.nome} ${item.porcentagem}%</div>
+                         <div class="valor">R$ ${item.valor.toFixed(2)}</div>`;
         container.appendChild(btn);
       });
     }
+    criarBotoesMeio();
 
-    function atualizarHistorico() {
-      const h = document.getElementById("historico");
-      h.innerHTML = historicoValores.join("<br>");
-    }
-
-    criarBotoes(botoesTopo, "topo");
-    criarBotoes(botoesMeio, "meio");
-
-    // Evento do botão Emprestar investimento
     document.getElementById("btnEmprestarInvestimento").addEventListener("click", () => {
       const nome = document.getElementById("inputNomePessoa").value.trim();
       const valor = parseFloat(document.getElementById("inputValorEmprestado").value);
-
       if (!nome) {
-        alert("Por favor, preencha o nome da pessoa.");
+        alert("Preencha o nome!");
         return;
       }
       if (isNaN(valor) || valor <= 0) {
-        alert("Por favor, insira um valor válido para quantia emprestada.");
+        alert("Digite valor válido!");
         return;
       }
-
       historicoValores.push(`Emprestado R$ ${valor.toFixed(2)} para ${nome}`);
-      atualizarHistorico();
-
-      // Limpar inputs após adicionar
+      document.getElementById("historico").style.display = "block";
+      document.getElementById("historico").innerHTML = historicoValores.join("<br>");
       document.getElementById("inputNomePessoa").value = "";
       document.getElementById("inputValorEmprestado").value = "";
     });
