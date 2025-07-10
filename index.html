@@ -3,7 +3,7 @@
 <html lang="pt-BR">
 <head>
   <meta charset="UTF-8" />
-  <title>Botões Financeiros Grandes</title>
+  <title>Botões Financeiros 2x2</title>
   <style>
     body {
       background: #111;
@@ -13,31 +13,37 @@
     }
 
     .botoes-container {
-      display: flex;
-      flex-direction: column;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
       gap: 20px;
     }
 
     .botao-grande {
       background: #222;
-      padding: 30px;
+      padding: 30px 10px;
       border-radius: 15px;
       text-align: center;
       box-shadow: 0 4px 8px rgba(0,0,0,0.6);
-      width: 100%;
     }
 
     .botao-grande h2 {
       margin: 0;
-      font-size: 24px;
+      font-size: 22px;
       color: #aaa;
     }
 
     .botao-grande p {
       margin: 10px 0 0;
-      font-size: 32px;
+      font-size: 30px;
       color: #0f0;
       font-weight: bold;
+    }
+
+    /* Responsivo para telas pequenas */
+    @media (max-width: 600px) {
+      .botoes-container {
+        grid-template-columns: 1fr;
+      }
     }
   </style>
 </head>
