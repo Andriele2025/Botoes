@@ -23,7 +23,7 @@
 
     input, button {
       width: 160px;
-      height: 60px;
+      height: 70px;
       border: none;
       border-radius: 10px;
       font-size: 16px;
@@ -56,14 +56,12 @@
 
     .red { background: #e53935; }
     .blue { background: #1565c0; }
-    .yellow { background: #f9a825; }
     .green { background: #43a047; }
 
     .valor {
       font-size: 14px;
       font-weight: normal;
       margin-top: 5px;
-      display: none; /* inicia oculto para o investimento */
     }
   </style>
 </head>
@@ -75,7 +73,7 @@
     <input type="text" id="descricao" placeholder="Descrição">
     <input type="number" id="valor" placeholder="Valor">
     <button class="red" onclick="adicionar()">Adicionar</button>
-    <button class="red">Mostrar/Ocultar</button>
+    <button class="red" onclick="toggleTodos()">Mostrar/Ocultar</button>
     <button class="red" onclick="limparHistorico()">Limpar Histórico</button>
     <button class="green" onclick="entradaDinheiro()">Entrada Dinheiro</button>
   </div>
@@ -104,7 +102,8 @@
 
   <script>
     function entradaDinheiro() {
-      const valor = parseFloat(document.getElementById('valor').value);
+      const valorInput = document.getElementById('valor').value;
+      const valor = parseFloat(valorInput);
       if (isNaN(valor) || valor <= 0) {
         alert('Insira um valor válido');
         return;
@@ -115,12 +114,10 @@
       const contas = valor * 0.30;
       const investimento = valor * 0.30;
 
-      // Exibir valores dentro dos botões
       document.getElementById('valDizimo').innerText = `R$ ${dizimo.toFixed(2)}`;
       document.getElementById('valAluguel').innerText = `R$ ${aluguel.toFixed(2)}`;
       document.getElementById('valContas').innerText = `R$ ${contas.toFixed(2)}`;
 
-      // Atualiza investimento somando ao valor já existente
       const investimentoElem = document.getElementById('valInvestimento');
       let investimentoAtual = parseFloat(investimentoElem.innerText.replace('R$', '').replace(',', '.'));
       if (isNaN(investimentoAtual)) investimentoAtual = 0;
@@ -129,29 +126,58 @@
     }
 
     function adicionar() {
-      alert('Função de adicionar entrada será implementada.');
+      const data = document.getElementById('data').value;
+      const descricao = document.getElementById('descricao').value;
+      const valor = document.getElementById('valor').value;
+
+      if (!data || !descricao || !valor) {
+        alert('Preencha todos os campos antes de adicionar.');
+        return;
+      }
+
+      console.log(`Adicionado: ${data} | ${descricao} | R$ ${parseFloat(valor).toFixed(2)}`);
+
+      // Limpa os campos após adicionar
+      document.getElementById('data').value = '';
+      document.getElementById('descricao').value = '';
+      document.getElementById('valor').value = '';
+
+      alert('Entrada adicionada com sucesso.');
     }
 
     function limparHistorico() {
-      // Zera dízimo, aluguel e contas
       document.getElementById('valDizimo').innerText = 'R$ 0,00';
       document.getElementById('valAluguel').innerText = 'R$ 0,00';
       document.getElementById('valContas').innerText = 'R$ 0,00';
-      // Investimento permanece com o valor que estiver
+      // investimento permanece
     }
 
     function toggleInvestimento() {
-      const valorElem = document.getElementById('valInvestimento');
-      if (valorElem.style.display === 'none' || valorElem.style.display === '') {
-        valorElem.style.display = 'block'; // mostra
+      const elem = document.getElementById('valInvestimento');
+      if (elem.style.display === 'none' || elem.style.display === '') {
+        elem.style.display = 'block';
       } else {
-        valorElem.style.display = 'none'; // oculta
+        elem.style.display = 'none';
       }
+    }
+
+    function toggleTodos() {
+      // exemplo: mostrar ou ocultar todos valores ao clicar (se quiser usar no botão Mostrar/Ocultar)
+      const ids = ['valDizimo', 'valAluguel', 'valContas', 'valInvestimento'];
+      ids.forEach(id => {
+        const el = document.getElementById(id);
+        if (el.style.display === 'none' || el.style.display === '') {
+          el.style.display = 'block';
+        } else {
+          el.style.display = 'none';
+        }
+      });
     }
   </script>
 
 </body>
 </html>
+
 
 
 
