@@ -1,75 +1,314 @@
 
+
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <title>Botões Financeiros 2x2</title>
-  <style>
-    body {
-      background: #111;
-      font-family: Arial, sans-serif;
-      padding: 20px;
-      color: #fff;
-    }
-
-    .botoes-container {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 20px;
-    }
-
-    .botao-grande {
-      background: #222;
-      padding: 30px 10px;
-      border-radius: 15px;
-      text-align: center;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.6);
-    }
-
-    .botao-grande h2 {
-      margin: 0;
-      font-size: 22px;
-      color: #aaa;
-    }
-
-    .botao-grande p {
-      margin: 10px 0 0;
-      font-size: 30px;
-      color: #0f0;
-      font-weight: bold;
-    }
-
-    /* Responsivo para telas pequenas */
-    @media (max-width: 600px) {
-      .botoes-container {
-        grid-template-columns: 1fr;
-      }
-    }
-  </style>
+<meta charset="UTF-8" />
+<title>Controle Financeiro com Histórico Organizado</title>
+<style>
+  body {
+    font-family: 'Segoe UI', sans-serif;
+    background: #f0f2f5;
+    padding: 20px;
+    color: #333;
+  }
+  .container {
+    max-width: 720px;
+    margin: auto;
+    background: #fff;
+    padding: 30px;
+    border-radius: 12px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.1);
+  }
+  h2, h3 {
+    text-align: center;
+  }
+  label {
+    display: block;
+    margin-top: 15px;
+    font-weight: bold;
+  }
+  input {
+    width: 100%;
+    padding: 8px;
+    margin-top: 5px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+  }
+  button {
+    width: 100%;
+    margin-top: 25px;
+    padding: 12px;
+    font-size: 16px;
+    border-radius: 8px;
+    border: none;
+    background-color: #28a745;
+    color: white;
+    cursor: pointer;
+    transition: background-color .3s;
+  }
+  button:hover {
+    background-color: #218838;
+  }
+  textarea {
+    width: 100%;
+    height: 180px;
+    margin-top: 10px;
+    padding: 10px;
+    font-family: monospace;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    resize: none;
+    white-space: pre-line;
+  }
+  .entrada-bloco {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+  }
+  .entrada-bloco > div {
+    flex: 1 1 48%;
+    min-width: 300px;
+  }
+  /* Estilo para o botão olho no investimento */
+  #toggle-investimento {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 18px;
+    margin-left: 8px;
+  }
+</style>
 </head>
 <body>
 
-  <div class="botoes-container">
-    <div class="botao-grande">
-      <h2>Dízimo</h2>
-      <p>R$ 0.00</p>
-    </div>
+<div class="container">
+  <h2>📒 Controle Financeiro com Histórico Organizado</h2>
 
-    <div class="botao-grande">
-      <h2>Investimento</h2>
-      <p>R$ 0.00</p>
+  <h3>Entradas com data digitada (Altere no formulário)</h3>
+  <div class="entrada-bloco">
+    <div>
+      <label>📝 Entrada 1 Origem:</label>
+      <input type="text" id="origem1" value="Cliente X" />
+      <label>📅 Data Digitada:</label>
+      <input type="date" id="data1" />
+      <label>💵 Valor (R$):</label>
+      <input type="number" id="valor1" step="0.01" value="200" />
     </div>
-
-    <div class="botao-grande">
-      <h2>Contas</h2>
-      <p>R$ 0.00</p>
-    </div>
-
-    <div class="botao-grande">
-      <h2>Alimentação</h2>
-      <p>R$ 0.00</p>
+    <div>
+      <label>📝 Entrada 2 Origem:</label>
+      <input type="text" id="origem2" value="Cliente Y" />
+      <label>📅 Data Digitada:</label>
+      <input type="date" id="data2" />
+      <label>💵 Valor (R$):</label>
+      <input type="number" id="valor2" step="0.01" value="350" />
     </div>
   </div>
+
+  <h3>Entradas com data programada fixa (Altere datas no código)</h3>
+  <div class="entrada-bloco">
+    <div>
+      <label>📝 Entrada 3 Origem:</label>
+      <input type="text" id="origem3" value="Cliente A" />
+      <label>💵 Valor (R$):</label>
+      <input type="number" id="valor3" step="0.01" value="300" />
+    </div>
+    <div>
+      <label>📝 Entrada 4 Origem:</label>
+      <input type="text" id="origem4" value="Cliente B" />
+      <label>💵 Valor (R$):</label>
+      <input type="number" id="valor4" step="0.01" value="300" />
+    </div>
+  </div>
+
+  <button onclick="registrarEntradas()">Registrar Entradas</button>
+
+  <div class="bloco">
+    <h3>💰 Total Atual: <span id="total">R$ 0.00</span></h3>
+    <div class="titulo-divisao">📊 Divisão Atual:</div>
+    <div id="divisao"></div>
+  </div>
+
+  <div class="bloco">
+    <h3>📜 Histórico</h3>
+    <textarea id="historico" readonly></textarea>
+  </div>
+
+  <!-- Botão para imprimir relatório -->
+  <button onclick="imprimirRelatorio()">🖨️ Imprimir Relatório</button>
+
+</div>
+
+<script>
+  const datasProgramadas = {
+    3: '2025-07-15',
+    4: '2025-07-20'
+  };
+
+  function formatDataHora(d) {
+    return d.toLocaleDateString() + ' ' + d.toLocaleTimeString();
+  }
+
+  function salvarDadosLocal(total, historico, divisaoHTML) {
+    localStorage.setItem('total', total.toFixed(2));
+    localStorage.setItem('historico', historico);
+    localStorage.setItem('divisao', divisaoHTML);
+  }
+
+  function toggleInvestimento() {
+    const elem = document.getElementById("investimento-valor");
+    if (elem.textContent === "••••••••") {
+      elem.textContent = `R$ ${window.valorInvestimento.toFixed(2)}`;
+    } else {
+      elem.textContent = "••••••••";
+    }
+  }
+
+  function carregarDadosSalvos() {
+    const total = localStorage.getItem('total');
+    const historico = localStorage.getItem('historico');
+
+    if (total) document.getElementById("total").textContent = `R$ ${parseFloat(total).toFixed(2)}`;
+    if (historico) document.getElementById("historico").value = historico;
+
+    if (total) {
+      const totalNum = parseFloat(total);
+      const dizimo = totalNum * 0.10;
+      const contas = totalNum * 0.30;
+      const alimentacao = totalNum * 0.30;
+      const investimento = totalNum * 0.30;
+      window.valorInvestimento = investimento;
+
+      const divisaoHTML = `
+        <ul>
+          <li>🛐 Dízimo (10%): R$ ${dizimo.toFixed(2)}</li>
+          <li>💡 Contas (30%): R$ ${contas.toFixed(2)}</li>
+          <li>🍽️ Alimentação (30%): R$ ${alimentacao.toFixed(2)}</li>
+          <li>📈 Investimento (30%): 
+            <span id="investimento-valor" style="user-select:none;">••••••••</span>
+            <button id="toggle-investimento" aria-label="Mostrar/ocultar investimento">👁️</button>
+          </li>
+        </ul>
+      `;
+
+      document.getElementById("divisao").innerHTML = divisaoHTML;
+      document.getElementById("toggle-investimento").addEventListener('click', toggleInvestimento);
+    }
+  }
+
+  function registrarEntradas() {
+    const hoje = new Date();
+    let total = parseFloat(localStorage.getItem('total')) || 0;
+    let historicoNovo = '';
+
+    for(let i =1; i <=2; i++) {
+      const origem = document.getElementById(`origem${i}`).value.trim();
+      const valor = parseFloat(document.getElementById(`valor${i}`).value);
+      const dataStr = document.getElementById(`data${i}`).value;
+
+      if(!origem || isNaN(valor) || valor <= 0 || !dataStr) continue;
+
+      const dataEntrada = new Date(dataStr);
+      if(dataEntrada <= hoje) {
+        total += valor;
+        historicoNovo += `📅 ${formatDataHora(new Date())}\nCliente: ${origem}\nValor: R$ ${valor.toFixed(2)}\n------------------------------\n`;
+      }
+    }
+
+    for(let i = 3; i <=4; i++) {
+      const origem = document.getElementById(`origem${i}`).value.trim();
+      const valor = parseFloat(document.getElementById(`valor${i}`).value);
+      const dataStr = datasProgramadas[i];
+
+      if(!origem || isNaN(valor) || valor <= 0 || !dataStr) continue;
+
+      const dataEntrada = new Date(dataStr);
+      if(dataEntrada <= hoje) {
+        total += valor;
+        historicoNovo += `📅 ${formatDataHora(new Date())}\nCliente: ${origem}\nValor: R$ ${valor.toFixed(2)}\n------------------------------\n`;
+      }
+    }
+
+    document.getElementById("total").textContent = `R$ ${total.toFixed(2)}`;
+
+    const dizimo = total * 0.10;
+    const contas = total * 0.30;
+    const alimentacao = total * 0.30;
+    const investimento = total * 0.30;
+
+    window.valorInvestimento = investimento;
+
+    const divisaoHTML = `
+      <ul>
+        <li>🛐 Dízimo (10%): R$ ${dizimo.toFixed(2)}</li>
+        <li>💡 Contas (30%): R$ ${contas.toFixed(2)}</li>
+        <li>🍽️ Alimentação (30%): R$ ${alimentacao.toFixed(2)}</li>
+        <li>📈 Investimento (30%): 
+          <span id="investimento-valor" style="user-select:none;">••••••••</span>
+          <button id="toggle-investimento" aria-label="Mostrar/ocultar investimento">👁️</button>
+        </li>
+      </ul>
+    `;
+
+    document.getElementById("divisao").innerHTML = divisaoHTML;
+    document.getElementById("toggle-investimento").addEventListener('click', toggleInvestimento);
+
+    document.getElementById("historico").value += historicoNovo;
+
+    salvarDadosLocal(total, document.getElementById("historico").value, divisaoHTML);
+  }
+
+  function imprimirRelatorio() {
+    const total = document.getElementById("total").textContent;
+    const divisao = document.getElementById("divisao").innerHTML;
+    const historico = document.getElementById("historico").value.replace(/\n/g, "<br>");
+
+    const htmlRelatorio = `
+      <html>
+      <head>
+        <title>Relatório Financeiro</title>
+        <style>
+          body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; margin: 20px; color: #333; }
+          h2, h3 { text-align: center; }
+          hr { margin: 20px 0; }
+          .section { margin-bottom: 20px; }
+          ul { list-style: none; padding-left: 0; }
+          ul li { margin: 5px 0; font-size: 1.1em; }
+          .historico { white-space: pre-wrap; border: 1px solid #ccc; padding: 15px; border-radius: 8px; background: #fafafa; }
+        </style>
+      </head>
+      <body>
+        <h2>📒 Relatório Financeiro</h2>
+        <hr>
+        <div class="section">
+          <h3>Total Atual</h3>
+          <p style="font-size: 1.4em; font-weight: bold;">${total}</p>
+        </div>
+        <div class="section">
+          <h3>Divisão Atual</h3>
+          ${divisao}
+        </div>
+        <div class="section">
+          <h3>Histórico</h3>
+          <div class="historico">${historico}</div>
+        </div>
+        <script>
+          window.onload = function() {
+            window.print();
+            setTimeout(() => window.close(), 100);
+          }
+        <\/script>
+      </body>
+      </html>
+    `;
+
+    const novaJanela = window.open('', '', 'width=800,height=600');
+    novaJanela.document.write(htmlRelatorio);
+    novaJanela.document.close();
+  }
+
+  window.onload = carregarDadosSalvos;
+</script>
 
 </body>
 </html>
